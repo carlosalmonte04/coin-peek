@@ -24,18 +24,26 @@ function User() {
   }
 
   this.removeCoin = (coin) => {
+    console.log("ran remove")
       const coinsCollection = Object.assign({}, JSON.parse(this.coins()))
 
       delete coinsCollection[coin]
-
+      localStorage.setItem('coins', JSON.stringify(coinsCollection))
       if (Object.keys(JSON.parse(user.coins())).length === 0) {
+        console.log("was true")
         localStorage.removeItem('coins')
-      }
-      else {
-        localStorage.setItem('coins', JSON.stringify(coinsCollection))
       }
   }
 }
+
+function renderGetStarted() {
+  return (`
+    <div>
+      <H1>Get started by searching for coins to peek</H1>
+    </div>
+  `)
+}
+
 
 function _cleanedCoinInfo(coinInfo) {
   coinInfo.long = coinInfo.display_name
@@ -44,7 +52,12 @@ function _cleanedCoinInfo(coinInfo) {
 }
 
 function renderUserCoins(htmlElements) {
-  htmlElements.coinsUl.innerHTML = coinsListRender(Object.values(user.jsonCoins()))
+  if (user.jsonCoins()) {
+    htmlElements.coinsUl.innerHTML = coinsListRender(Object.values(user.jsonCoins()))
+  }
+  else {
+    htmlElements.coinsUl.innerHTML = renderGetStarted()
+  }
 }
 
 
@@ -60,7 +73,7 @@ function getCoinInfo(coin) {
 function coinsListRender(coins) {
   const coinsList = coins.map(coin => {
     return (`
-        <li id="${coin.long}-li" class="coin-li ${user.hasCoin(coin.short) ? 'selected' : ''}">
+        <li id="${coin.short}-li" class="coin-li ${user.hasCoin(coin.short) ? 'selected' : ''}">
           <div class="coin-info-container">
             <div class="coin-name-container">
               <div class="coin-name-short">${coin.short}</div>
@@ -88,8 +101,8 @@ function getCoinsAvailable(coinsUl) {
     fetch(`http://coincap.io/front`)
     .then(res => res.json())
     .then(coins => {
+      console.log("got coins")
       coinsStorage = coins
-      console.log("coins ta", coinsStorage)
     })
   }
 }
@@ -107,6 +120,8 @@ function addAllEventListeners(htmlElements) {
   htmlElements.coinsUl.onclick = (e) => {
 
     if (e.target.className.includes('action add')) {
+      const li = document.getElementById(`${e.target.id}-li`)
+      li.className = li.className + " animated pulse loading"
       user.addCoin(e.target.id)
       .then(() =>
         renderCoins(htmlElements.searchInput.value, htmlElements.coinsUl)
@@ -127,9 +142,20 @@ function addAllEventListeners(htmlElements) {
   htmlElements.searchInput.onkeyup = (e) => {
     if (e.target.value.length > 0) {
       htmlElements.coinsUl.className = "coins-ul"
+      htmlElements.backBtn.className = "showing"
       renderCoins(e.target.value, htmlElements.coinsUl)
     }
     else {
+      htmlElements.backBtn.className = "animated fadeOut"
+      htmlElements.coinsUl.className = "coins-ul user-ul"
+      renderUserCoins(htmlElements)
+    }
+  }
+
+  htmlElements.backBtn.onclick = (e) => {
+    if (htmlElements.backBtn.className.includes('showing')) {
+      htmlElements.searchInput.value = ""
+      htmlElements.backBtn.className = "animated fadeOut"
       htmlElements.coinsUl.className = "coins-ul user-ul"
       renderUserCoins(htmlElements)
     }
@@ -142,8 +168,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const coinsMenuContainer = document.getElementById('coins-menu-container')
   const coinsUl            = document.getElementById('coins-ul')
   const searchInput        = document.getElementById('search-coin-input')
+  const backBtn            = document.getElementById('back-btn')
 
-  const htmlElements = {coinsContainer, coinsMenuContainer, coinsUl, searchInput}
+  const htmlElements = {coinsContainer, coinsMenuContainer, coinsUl, searchInput, backBtn}
 
   addAllEventListeners(htmlElements)
 
@@ -158,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
   }
   else {
+    htmlElements.coinsUl.innerHTML = renderGetStarted()
     getCoinsAvailable(coinsUl)
   }
 });
