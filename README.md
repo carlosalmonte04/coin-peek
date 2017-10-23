@@ -30,3 +30,5 @@ if you are familiar on how to run chrome extensions you should be able to run th
 
 
 # Accepting Pull Requests!
+
+Thanks for stopping by.
