@@ -24,5 +24,9 @@ if you are familiar on how to run chrome extensions you should be able to run th
 
 - More styling
 - More intuitive
+- More features
 - Refactoring
 - Try to get rid of TweenMax
+
+
+# Accepting Pull Requests!
