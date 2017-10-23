@@ -1,6 +1,5 @@
 <html>
 <head>
-  <script href="http://underscorejs.org/underscore-min.js"></script>
   <script src="popup.js"></script>
   <link rel="stylesheet" href="animate.min.css">
   <link rel="stylesheet" href="style.css">
@@ -10,7 +9,7 @@
 	<div class="main-wrapper">
 	  
 	  <div  class="header-input-container animated fadeIn">
-	  	<div class="header"><div id="back-btn"><icon class="fa fa-chevron-left"></icon></div><icon class="fa fa-usd"></icon><icon class="fa fa-eye"></icon> Coin Peek</div>
+	  	<div class="header"><div id="back-btn"><icon class="fa fa-chevron-left"></icon></div><icon class="fa fa-eye"></icon> Coin Peek <div id="refresh-btn"><icon class="fa fa-refresh"></icon></div></div>
 		  <div class="input-container">
 		    <input id="search-coin-input" type="text" id="name" required />
 		    <label for="name">Search</label>
@@ -18,7 +17,6 @@
 	  </div>
 	  <div id="ul-container" class="ul-container">
   		<ul id="coins-ul" class="coins-ul user-ul">
-  			<div>HELLO</div>
   		</ul>
   	</div>
 	  
