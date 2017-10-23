@@ -121,7 +121,7 @@ function coinsListRender(coins) {
                 </div>
               </div>
               <div class="coin-price">$${coin.price}</div>
-              <div class="coin-change ${parseInt(coin.cap24hrChange) <= 0 ? 'loss' : 'gain'}">${coin.cap24hrChange}%</div>
+              <div class="coin-change ${coin.cap24hrChange.toString()[0] === "-" ? 'loss' : 'gain'}">${coin.cap24hrChange}%</div>
             </div>
           </div>
         </li>
